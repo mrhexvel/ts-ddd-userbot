@@ -11,7 +11,7 @@ interface Command {
     args: string[],
     vkApiService: VkApiService,
     event: any
-  ) => void;
+  ) => Promise<void>;
 }
 
 export class CommandRegistry {
@@ -37,16 +37,16 @@ export class CommandRegistry {
     }
   }
 
-  executeCommand(
+  async executeCommand(
     user: User,
     commandName: string,
     args: string[],
     vkApiService: VkApiService,
     event: any
-  ): void {
+  ): Promise<void> {
     const command = this.commands.get(commandName);
     if (command) {
-      command.execute(user, args, vkApiService, event);
+      await command.execute(user, args, vkApiService, event);
     } else {
       console.log(`Command ${commandName} not found.`);
     }

@@ -13,14 +13,14 @@ export class User {
     this.commandRegistry = new CommandRegistry();
   }
 
-  handleEvent(event: any, vkApiService: VkApiService): void {
+  async handleEvent(event: any, vkApiService: VkApiService): Promise<void> {
     if (event.type === "message_new" && event.text?.split(" ")[0] === ".д") {
       const commandText = event.text.slice(3).trim();
       const [commandName, ...args] = commandText.split(" ");
       logger.info(
         `User ${this.userId} is executing command: ${commandName} with args: ${args}`
       );
-      this.commandRegistry.executeCommand(
+      await this.commandRegistry.executeCommand(
         this,
         commandName,
         args,

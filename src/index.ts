@@ -3,6 +3,7 @@ import { UserManager } from "./application/services/UserManager";
 import { Database } from "./infrastructure/database/Database";
 import { User } from "./domain/entities/User";
 import { UserBot } from "./infrastructure/vk/UserBot";
+import { CommandRegistry } from "./application/services/CommandRegistry";
 
 config();
 
@@ -34,6 +35,6 @@ config();
       await database.addUser(data.userId, data.token, data.otherData);
     }
 
-    const userBot = new UserBot(user);
+    const userBot = new UserBot(user, new CommandRegistry());
   }
 })();
