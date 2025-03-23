@@ -45,6 +45,14 @@ export class Database {
     return rows[0];
   }
 
+  async getAllUsers(): Promise<any[]> {
+    const [rows] = (await this.connection.execute("SELECT * FROM users")) as [
+      mysql.RowDataPacket[],
+      mysql.FieldPacket[]
+    ];
+    return rows;
+  }
+
   async removeUser(userId: number): Promise<void> {
     await this.connection.execute("DELETE FROM users WHERE id = ?", [userId]);
   }

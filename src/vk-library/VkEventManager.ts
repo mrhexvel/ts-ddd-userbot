@@ -8,6 +8,7 @@ export class VkEventManager extends EventEmitter {
   private longPollServer: any;
   private ts: string | null = null;
   private pts: number | null = null;
+  private isRunning: boolean = true;
 
   constructor(client: VkClient) {
     super();
@@ -15,8 +16,18 @@ export class VkEventManager extends EventEmitter {
   }
 
   async start() {
+    this.isRunning = true;
     this.longPollServer = await this.client.getLongPollServer();
     this.listenForUpdates();
+  }
+
+  async stop() {
+    this.isRunning = false;
+    this.ts = null;
+    this.pts = null;
+    this.longPollServer = null;
+
+    this.removeAllListeners();
   }
 
   private async listenForUpdates() {

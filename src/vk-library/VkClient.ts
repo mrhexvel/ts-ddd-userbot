@@ -51,4 +51,8 @@ export class VkClient {
 
     this.eventManager.start();
   }
+
+  stoplistening() {
+    this.eventManager.stop();
+  }
 }

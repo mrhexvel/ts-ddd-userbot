@@ -1,11 +1,13 @@
 import { config } from "dotenv";
 import { User } from "./domain/entities/User";
+import { UsersCombiner } from "./domain/entities/UsersCombiner";
 import { Database } from "./infrastructure/database/Database";
 import { VkApi } from "./vk-library/VkApi";
 
 config();
 
 (async () => {
+  const combiner = new UsersCombiner();
   const database = new Database(
     process.env.DB_HOST!,
     process.env.DB_USER!,
@@ -15,28 +17,18 @@ config();
 
   await database.initialize();
 
-  const usersData = [
-    {
-      userId: 715616525,
-      token: process.env.TOKEN!,
-      otherData: "dev",
-    },
-    {
-      userId: 575107090,
-      token: process.env.KARP_TOKEN!,
-      otherData: "lox",
-    },
-  ];
+  const usersData = await database.getAllUsers();
 
   for (const data of usersData) {
-    const userInDb = await database.getUser(data.userId);
-    const user = new User(data.userId, data.token, data.otherData);
+    const user = new User(data.id, data.token, data.other_data);
 
-    if (!userInDb) {
-      await database.addUser(data.userId, data.token, data.otherData);
+    if (combiner.has(user.userId)) {
+      combiner.getUser(user.userId)?.stoplistening();
+      combiner.removeUser(user.userId);
     }
 
     const vkApi = new VkApi(user);
+    combiner.addUser(user.userId, vkApi);
     vkApi.startListening();
   }
 })();
