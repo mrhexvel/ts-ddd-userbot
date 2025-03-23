@@ -1,7 +1,7 @@
-import { VK } from "vk-io";
 import { User } from "../../domain/entities/User";
 import { CommandRegistry } from "../../application/services/CommandRegistry";
 import { logger } from "../../utils/logger";
+import type { Event } from "../../types/Event";
 import { VkApiService } from "../../application/services/VkApiService";
 
 export class UserBot {
@@ -17,8 +17,9 @@ export class UserBot {
   private setupListeners(): void {
     this.vkApiService.vk.updates.on("message_new", async (context) => {
       await context.loadMessagePayload();
+      if (!context.isOutbox) return;
 
-      const event = {
+      const event: Event = {
         type: "message_new",
         text: context.text,
         messageId: context.id,

@@ -1,6 +1,7 @@
 import { readdirSync } from "fs";
 import { join } from "path";
 import { User } from "../../domain/entities/User";
+import type { Event } from "../../types/Event";
 import type { VkApiService } from "./VkApiService";
 
 interface Command {
@@ -10,7 +11,7 @@ interface Command {
     user: User,
     args: string[],
     vkApiService: VkApiService,
-    event: any
+    event: Event
   ) => Promise<void>;
 }
 
@@ -42,7 +43,7 @@ export class CommandRegistry {
     commandName: string,
     args: string[],
     vkApiService: VkApiService,
-    event: any
+    event: Event
   ): Promise<void> {
     const command = this.commands.get(commandName);
     if (command) {

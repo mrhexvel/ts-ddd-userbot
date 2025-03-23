@@ -2,9 +2,9 @@ import { User } from "../../domain/entities/User";
 import type { IUserRepository } from "../../domain/repositories/IUserRepository";
 
 export class UserRepositoryImpl implements IUserRepository {
-  private users: Map<string, User> = new Map();
+  private users: Map<number, User> = new Map();
 
-  async findUserById(userId: string): Promise<User | null> {
+  async findUserById(userId: number): Promise<User | null> {
     return this.users.get(userId) || null;
   }
 

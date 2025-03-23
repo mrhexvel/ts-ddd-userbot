@@ -1,4 +1,5 @@
 import { User } from "../../domain/entities/User";
+import type { Event } from "../../types/Event";
 import type { VkApiService } from "../services/VkApiService";
 
 export const pingCommand = {
@@ -8,7 +9,7 @@ export const pingCommand = {
     user: User,
     args: string[],
     vkApiService: VkApiService,
-    event: any
+    event: Event
   ) => {
     console.log(`User ${user.userId} executed пинг command with args:`, args);
     await vkApiService.editMessage(event.peerId, event.messageId, "сосать.");

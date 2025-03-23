@@ -1,5 +1,4 @@
 import { config } from "dotenv";
-import { UserManager } from "./application/services/UserManager";
 import { Database } from "./infrastructure/database/Database";
 import { User } from "./domain/entities/User";
 import { UserBot } from "./infrastructure/vk/UserBot";
@@ -8,7 +7,6 @@ import { CommandRegistry } from "./application/services/CommandRegistry";
 config();
 
 (async () => {
-  const userManager = new UserManager();
   const database = new Database(
     process.env.DB_HOST!,
     process.env.DB_USER!,
@@ -28,7 +26,6 @@ config();
 
   for (const data of usersData) {
     const user = new User(data.userId, data.token, data.otherData);
-    userManager.addUser(user);
     const userInDb = await database.getUser(data.userId);
 
     if (!userInDb) {

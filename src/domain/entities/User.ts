@@ -1,5 +1,6 @@
 import { CommandRegistry } from "../../application/services/CommandRegistry";
 import type { VkApiService } from "../../application/services/VkApiService";
+import type { Event } from "../../types/Event";
 import { logger } from "../../utils/logger";
 
 export class User {
@@ -13,10 +14,12 @@ export class User {
     this.commandRegistry = new CommandRegistry();
   }
 
-  async handleEvent(event: any, vkApiService: VkApiService): Promise<void> {
+  async handleEvent(event: Event, vkApiService: VkApiService): Promise<void> {
     if (event.type === "message_new" && event.text?.split(" ")[0] === ".д") {
       const commandText = event.text.slice(3).trim();
       const [commandName, ...args] = commandText.split(" ");
+      if (!commandName) return;
+
       logger.info(
         `User ${this.userId} is executing command: ${commandName} with args: ${args}`
       );
