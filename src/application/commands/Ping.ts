@@ -1,7 +1,8 @@
 import { User } from "../../domain/entities/User";
 import type { Message } from "../../types/messages";
 import Emoji from "../../utils/emoji";
-import { VkClient } from "../../vk-library/VkClient";
+import { editMessage } from "../../vk-library/Methods";
+import type { VkClient } from "../../vk-library/VkClient";
 
 export const pingCommand = {
   name: "пинг",
@@ -19,10 +20,10 @@ export const pingCommand = {
     const formattedLatency = Math.round(latency);
 
     try {
-      await client.callApi("messages.edit", {
+      await editMessage(client, {
+        message_id: message.id,
         peer_id: message.peer_id,
         message: `${Emoji.rocket} Время задержки: ${formattedLatency}мс.`,
-        message_id: message.id,
       });
     } catch {}
   },

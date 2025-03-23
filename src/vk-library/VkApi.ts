@@ -1,14 +1,13 @@
 import { EventEmitter } from "events";
-import type { CommandRegistry } from "../application/services/CommandRegistry";
 import type { User } from "../domain/entities/User";
 import { VkClient } from "./VkClient";
 
 export class VkApi extends EventEmitter {
   private client: VkClient;
 
-  constructor(user: User, commandRegistry: CommandRegistry) {
+  constructor(user: User) {
     super();
-    this.client = new VkClient(user, commandRegistry);
+    this.client = new VkClient(user);
   }
 
   async sendMessage(peerId: number, message: string): Promise<void> {

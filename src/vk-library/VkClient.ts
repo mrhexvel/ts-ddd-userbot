@@ -1,5 +1,4 @@
 import axios from "axios";
-import type { CommandRegistry } from "../application/services/CommandRegistry";
 import type { User } from "../domain/entities/User";
 import type { Message } from "../types/messages";
 import { VkEventManager } from "./VkEventManager";
@@ -11,7 +10,7 @@ export class VkClient {
   public LP_VERSION = 19;
   private eventManager: VkEventManager;
 
-  constructor(private user: User, commandRegistry: CommandRegistry) {
+  constructor(private user: User) {
     this.user = user;
     this.token = user.token;
     this.eventManager = new VkEventManager(this);

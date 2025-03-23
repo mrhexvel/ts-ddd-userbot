@@ -1,5 +1,4 @@
 import { config } from "dotenv";
-import { CommandRegistry } from "./application/services/CommandRegistry";
 import { User } from "./domain/entities/User";
 import { Database } from "./infrastructure/database/Database";
 import { VkApi } from "./vk-library/VkApi";
@@ -22,11 +21,11 @@ config();
       token: process.env.TOKEN!,
       otherData: "dev",
     },
-    // {
-    //   userId: 1020792340,
-    //   token: process.env.TOKEN!,
-    //   otherData: "admin",
-    // },
+    {
+      userId: 575107090,
+      token: process.env.KARP_TOKEN!,
+      otherData: "lox",
+    },
   ];
 
   for (const data of usersData) {
@@ -37,7 +36,7 @@ config();
       await database.addUser(data.userId, data.token, data.otherData);
     }
 
-    const vkApi = new VkApi(user, new CommandRegistry());
+    const vkApi = new VkApi(user);
     vkApi.startListening();
   }
 })();
