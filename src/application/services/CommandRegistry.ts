@@ -1,11 +1,17 @@
 import { readdirSync } from "fs";
 import { join } from "path";
 import { User } from "../../domain/entities/User";
+import type { VkApiService } from "./VkApiService";
 
 interface Command {
   name: string;
   description: string;
-  execute: (user: User, args: string[]) => void;
+  execute: (
+    user: User,
+    args: string[],
+    vkApiService: VkApiService,
+    event: any
+  ) => void;
 }
 
 export class CommandRegistry {
@@ -31,12 +37,22 @@ export class CommandRegistry {
     }
   }
 
-  executeCommand(user: User, commandName: string, args: string[]): void {
+  executeCommand(
+    user: User,
+    commandName: string,
+    args: string[],
+    vkApiService: VkApiService,
+    event: any
+  ): void {
     const command = this.commands.get(commandName);
     if (command) {
-      command.execute(user, args);
+      command.execute(user, args, vkApiService, event);
     } else {
       console.log(`Command ${commandName} not found.`);
     }
+  }
+
+  hasCommand(commandName: string): boolean {
+    return this.commands.has(commandName);
   }
 }
