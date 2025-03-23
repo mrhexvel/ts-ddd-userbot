@@ -19,7 +19,7 @@ config();
 
   const usersData = [
     {
-      userId: "715616525",
+      userId: 715616525,
       token: process.env.TOKEN!,
       otherData: "dev",
     },

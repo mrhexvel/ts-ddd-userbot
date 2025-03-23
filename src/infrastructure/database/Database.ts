@@ -28,7 +28,7 @@ export class Database {
   }
 
   async addUser(
-    userId: string,
+    userId: number,
     token: string,
     otherData?: string
   ): Promise<void> {
@@ -37,7 +37,7 @@ export class Database {
       [userId, token, otherData]
     );
   }
-  async getUser(userId: string): Promise<any> {
+  async getUser(userId: number): Promise<any> {
     const [rows] = (await this.connection.execute(
       "SELECT * FROM users WHERE id = ?",
       [userId]
@@ -45,7 +45,7 @@ export class Database {
     return rows[0];
   }
 
-  async removeUser(userId: string): Promise<void> {
+  async removeUser(userId: number): Promise<void> {
     await this.connection.execute("DELETE FROM users WHERE id = ?", [userId]);
   }
 }
