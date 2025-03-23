@@ -1,9 +1,3 @@
-type EventType = "message_new" | "message_edit";
+import type { ContextDefaultState, MessageContext } from "vk-io";
 
-export interface Event {
-  type: EventType;
-  text: string | undefined;
-  messageId: number;
-  peerId: number;
-  [key: string]: any;
-}
+export type Event = MessageContext<ContextDefaultState> & object;

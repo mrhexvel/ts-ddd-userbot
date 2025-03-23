@@ -1,8 +1,8 @@
 import { config } from "dotenv";
-import { Database } from "./infrastructure/database/Database";
-import { User } from "./domain/entities/User";
-import { UserBot } from "./infrastructure/vk/UserBot";
 import { CommandRegistry } from "./application/services/CommandRegistry";
+import { User } from "./domain/entities/User";
+import { Database } from "./infrastructure/database/Database";
+import { VkApi } from "./vk-library/VkApi";
 
 config();
 
@@ -22,16 +22,22 @@ config();
       token: process.env.TOKEN!,
       otherData: "dev",
     },
+    // {
+    //   userId: 1020792340,
+    //   token: process.env.TOKEN!,
+    //   otherData: "admin",
+    // },
   ];
 
   for (const data of usersData) {
-    const user = new User(data.userId, data.token, data.otherData);
     const userInDb = await database.getUser(data.userId);
+    const user = new User(data.userId, data.token, data.otherData);
 
     if (!userInDb) {
       await database.addUser(data.userId, data.token, data.otherData);
     }
 
-    const userBot = new UserBot(user, new CommandRegistry());
+    const vkApi = new VkApi(user, new CommandRegistry());
+    vkApi.startListening();
   }
 })();

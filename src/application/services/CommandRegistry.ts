@@ -1,8 +1,8 @@
 import { readdirSync } from "fs";
 import { join } from "path";
 import { User } from "../../domain/entities/User";
-import type { Event } from "../../types/Event";
-import type { VkApiService } from "./VkApiService";
+import type { Message } from "../../types/messages";
+import type { VkClient } from "../../vk-library/VkClient";
 
 interface Command {
   name: string;
@@ -10,8 +10,8 @@ interface Command {
   execute: (
     user: User,
     args: string[],
-    vkApiService: VkApiService,
-    event: Event
+    client: VkClient,
+    message: Message
   ) => Promise<void>;
 }
 
@@ -42,15 +42,13 @@ export class CommandRegistry {
     user: User,
     commandName: string,
     args: string[],
-    vkApiService: VkApiService,
-    event: Event
+    client: VkClient,
+    message: Message
   ): Promise<void> {
     const command = this.commands.get(commandName);
-    if (command) {
-      await command.execute(user, args, vkApiService, event);
-    } else {
-      console.log(`Command ${commandName} not found.`);
-    }
+    command
+      ? await command.execute(user, args, client, message)
+      : console.log(`Command ${commandName} not found.`);
   }
 
   hasCommand(commandName: string): boolean {
